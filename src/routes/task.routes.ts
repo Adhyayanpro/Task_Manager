@@ -6,15 +6,22 @@ import {
   getTask,
   updateTask,
   deleteTask,
-  getSummary
+  getSummary,
+  rateTask,
+  getTasksWithAvgRating,
 } from "../controllers/task.controller";
 const router = express.Router();
+import { authMiddleware } from "../middleware/auth.middleware";
 
-router.post("/", createTask);
-router.get("/", getTasks);
-router.get("/summary", getSummary);
-router.get("/:id", getTask);
-router.put("/:id", updateTask);
-router.delete("/:id", deleteTask);
+router.post("/", authMiddleware, createTask);
+router.post("/:id/rate", authMiddleware, rateTask); 
+router.get("/summary", authMiddleware, getSummary);
+router.get("/with-rating", authMiddleware, getTasksWithAvgRating);
+router.get("/", authMiddleware, getTasks);
+router.get("/:id", authMiddleware, getTask);
+router.put("/:id", authMiddleware, updateTask);
+router.delete("/:id", authMiddleware, deleteTask);
+
+
 
 export default router;
